@@ -19,9 +19,17 @@ class AsmParser:
         "ei":   0b11111011
     }
 
+    SIMPLE_ALU_COMMANDS = {
+        "sub": [0b10010000, 0b11010110]
+    }
+
     def __init__(self, scanner: AsmScanner, output: AsmOutput):
         self.__scanner = scanner
         self.__output = output
+        self.__mnemonic_table = [
+            {"mnemonics": self.NO_ARGS_COMMANDS, "parser": lambda opcode: self._parse_no_args(opcode)},
+            {"mnemonics": self.SIMPLE_ALU_COMMANDS, "parser": lambda opcode: self._parse_simple_alu(opcode)}
+        ]
 
     def parse(self):
         while True:
@@ -40,7 +48,11 @@ class AsmParser:
         token = self.__scanner.scan()
         if token.type != TokenType.EOL:
             raise Exception(f"Error: {token.filename}:{token.line}:{token.col}: End of Line Expected")
-        self.__output.output_byte(opcode)    
+        self.__output.output_byte(opcode)
+
+    def _parse_simple_alu(self, opcode: int):
+        raise Exception(f"Error: {token.filename}:{token.line}:{token.col}: Not implemented yet")
+
 
     
 
