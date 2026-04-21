@@ -10,7 +10,23 @@ class AsmScanner:
         self._content = ""
         self.next_line()
     
-    def scan(self) -> Token:
+    def next_line(self):
+        self._src_code = self._input_file.readline()
+        self._line += 1
+        self._col = 0
+    
+    def is_eof(self) -> bool:
+        return self._src_code == "" and self._cur_char() == "\0"
+    
+    def get_current_token(self) -> Token:
+        return self._token
+
+    def get_next_token(self) -> Token:
+        self._token = self._scan()
+        return self._token
+    
+
+    def _scan(self) -> Token:
         self._content = ""
         while self._is_same_char(" ") or self._is_same_char("\t") or self._is_same_char("\n"):
             self._next_char()
@@ -59,15 +75,13 @@ class AsmScanner:
         if self._cur_char() == ",":
             self._next_char()
             return Token(self._filename, self._line, cur_col, self._content, TokenType.COMMA)
+        if self._cur_char() == "[":
+            self._next_char()
+            return Token(self._filename, self._line, cur_col, self._content, TokenType.LEFT_INDEX)
+        if self._cur_char() == "]":
+            self._next_char()
+            return Token(self._filename, self._line, cur_col, self._content, TokenType.RIGHT_INDEX)
         raise Exception(f"Error: {self._filename}:{self._line}:{self._col}: Unknown character")
-    
-    def next_line(self):
-        self._src_code = self._input_file.readline()
-        self._line += 1
-        self._col = 0
-    
-    def is_eof(self) -> bool:
-        return self._src_code == "" and self._cur_char() == "\0"
     
     def _append(self):
         self._content += self._cur_char()

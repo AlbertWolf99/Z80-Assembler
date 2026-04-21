@@ -17,6 +17,8 @@ class TokenType(Enum):
     SHIFT_RIGHT = 13
     START_POSITION = 14
     CURRENT_POSITION = 15
+    LEFT_INDEX = 16
+    RIGHT_INDEX = 17
 
 
 class Token:
