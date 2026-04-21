@@ -37,7 +37,9 @@ class AsmParser:
         "outi": 0b10100111,
         "outd": 0b10101111,
         "otir": 0b10110111,
-        "otdr": 0b10111111
+        "otdr": 0b10111111,
+        "outir": 0b10110111,
+        "outdr": 0b10111111
     }
 
     SIMPLE_ALU_MNEMONICS = {
