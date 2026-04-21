@@ -20,6 +20,25 @@ class AsmParser:
         "ei":   0b11111011
     }
 
+    NO_ARGS_ED_MNEMONICS = {
+        "ldi":  0b10100000,
+        "ldd":  0b10101000,
+        "ldir": 0b10110000,
+        "lddr": 0b10111000,
+        "cpi":  0b10100001,
+        "cpd":  0b10101001,
+        "cpir": 0b10110001,
+        "cpdr": 0b10111001,
+        "ini":  0b10100010,
+        "ind":  0b10101010,
+        "inir": 0b10110010,
+        "indr": 0b10111010,
+        "outi": 0b10100111,
+        "outd": 0b10101111,
+        "otir": 0b10110111,
+        "otdr": 0b10111111
+    }
+
     SIMPLE_ALU_MNEMONICS = {
         "sub": [0b10010000, 0b11010110]
     }
@@ -29,6 +48,7 @@ class AsmParser:
         self._output = output
         self._mnemonic_table: list[dict[str, Any]] = [
             {"names": self.NO_ARGS_MNEMONICS,    "parser": self._parse_no_args},
+            {"names": self.NO_ARGS_ED_MNEMONICS, "parser": self._parse_no_args_ed},
             {"names": self.SIMPLE_ALU_MNEMONICS, "parser": self._parse_simple_alu}
         ]
 
@@ -51,6 +71,13 @@ class AsmParser:
         token = self._scanner.scan()
         if token.type != TokenType.EOL:
             raise Exception(f"Error: {token.filename}:{token.line}:{token.col}: End of Line Expected")
+        self._output.output_byte(opcode)
+
+    def _parse_no_args_ed(self, opcode: int):
+        token = self._scanner.scan()
+        if token.type != TokenType.EOL:
+            raise Exception(f"Error: {token.filename}:{token.line}:{token.col}: End of Line Expected")
+        self._output.output_byte(0b11101101)
         self._output.output_byte(opcode)
 
     def _parse_simple_alu(self, opcode: list[int]):
