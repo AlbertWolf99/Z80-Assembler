@@ -33,8 +33,8 @@ O objetivo deste projeto é fornecer uma ferramenta acessível para entusiastas 
    python3 asm.py test.s test.bin
    ```
 
-3. O arquivo de saída será gerado automaticamente (binário).
+3. O arquivo de saída em binário será gerado automaticamente.
 
-## 📄 Licença
+## Licença
 
 Este projeto está licenciado sob a licença MIT.
